@@ -9,6 +9,7 @@
 '''
 import numpy as np
 from sklearn import linear_model 
+from sklearn.datasets import make_regression
 
 '''1.1.1 linear_model.LinearRegression 最小二乘法
 LinearRegression(fit_intercept=True, normalize=False, 
@@ -23,7 +24,7 @@ reg1 = linear_model.LinearRegression()
 X1 = [[-3, 0], [1, 1], [2, 7]]
 y1 = [0, 1, 5]
 reg1.fit(X1, y1)   # 拟合
-print("------1.1.1------")
+print('-'*15 + '1.1.1' + '-'*15)
 print(reg1.coef_, reg1.intercept_)  # 系数和截断项
 print(reg1.get_params())  # 获取模型构造时输入的参数
 print(reg1.predict([[4, 4]])) # 预测新值, 注意输入要是二维矩阵
@@ -44,7 +45,7 @@ reg2 = linear_model.Ridge(alpha=0.4)  # 正则项超参数为0.5
 X2 = [[-3, 0], [1, 1], [2, 7]]
 y2 = [0, 1, 5]
 reg2.fit(X2,y2)
-print("------1.1.2------")
+print('-'*15 + '1.1.2' + '-'*15)
 print(reg2.coef_, reg2.intercept_)  # 系数和截断项
 print(reg2.get_params())  # 获取模型构造时输入的参数
 print(reg2.predict([[4, 4]])) # 预测新值, 注意输入要是二维矩阵
@@ -80,10 +81,48 @@ reg3 = linear_model.Lasso(alpha=0.4)  # 正则项超参数为0.5
 X3 = [[-3, 0], [1, 1], [2, 7]]
 y3 = [0, 1, 5]
 reg3.fit(X3,y3)
-print("------1.1.3------")
+print('-'*15 + '1.1.3' + '-'*15)
 print(reg3.coef_, reg3.intercept_)  # 系数和截断项
 print(reg3.sparse_coef_)  # 稀疏形式
 print(reg3.predict([[4, 4]])) # 预测新值, 注意输入要是二维矩阵
 print(reg3.score(X2,y2))  # 预测决定系数R^2
-'''LassoCV / LassoLarsCV(基于最小角回归算法) 交叉验证
+'''交叉验证:LassoCV - 同上,基本相同
+LassoLarsCV(基于最小角) - 可以自己计算出最优alpha, 但是数据很多时会很慢. 
 ''' 
+
+'''1.1.4 Multi-task Lasso => 误差项是F范数, 正则项是l1l2范数
+相当于把多个y并列一起求, 
+MultiTaskLasso(alpha=1.0, fit_intercept=True, normalize=False, copy_X=True, 
+     max_iter=1000, tol=0.0001, warm_start=False, random_state=None, selection=’cyclic’)
+参数与上面相同,详情见例子
+'''
+
+'''1.1.5. Elastic-Net => 正则项为 L1范数 + L2 范数的结合 
+ElasticNet(alpha=1.0, copy_X=True, fit_intercept=True, l1_ratio=0.5,
+      max_iter=1000, normalize=False, positive=False, precompute=False,
+      random_state=0, selection='cyclic', tol=0.0001, warm_start=False)
+
+'''
+X, y = make_regression(n_features=2, random_state=0)
+reg5 = linear_model.ElasticNet(random_state=0)
+reg5.fit(X, y)  
+print('-'*15 + '1.1.5' + '-'*15)
+print(reg5.coef_, reg5.intercept_) 
+print(reg5.predict([[0, 0]])) 
+
+'''1.1.8. LARS Lasso => 使用最小角回归的Lasso
+LassoLars(alpha=1.0, fit_intercept=True, verbose=False, normalize=True, 
+      precompute=’auto’, max_iter=500, eps=2.220446049250313e-16, copy_X=True, 
+      fit_path=True, positive=False)
+'''  
+reg8 = linear_model.LassoLars(alpha=0.1)
+X8 = [[-3, 0], [1, 1], [2, 7]]
+y8 = [0, 1, 5]
+reg8.fit(X8,y8)
+print('-'*15 + '1.1.8' + '-'*15)
+print(reg8.coef_, reg8.intercept_)  # 系数和截断项
+print(reg8.predict([[4, 4]])) # 预测新值, 注意输入要是二维矩阵
+
+
+
+
