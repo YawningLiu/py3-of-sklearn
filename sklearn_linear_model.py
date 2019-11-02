@@ -4,7 +4,7 @@
     w_i:系数 为 coef_
     w_0: 截断项 为 intercept_
     主要学习linear_model
-    LinearRegression / Ridge / 
+    LinearRegression / Ridge / Lasso / ElasticNet
     https://scikit-learn.org/stable/modules/linear_model.html#
 '''
 import numpy as np
